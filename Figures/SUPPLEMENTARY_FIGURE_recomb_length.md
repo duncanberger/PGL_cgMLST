@@ -1,4 +1,4 @@
-# Loci characteristics split by phi scores
+# Loci characteristics split by significant pairwise homoplasty index values
 ```{r}
 # Load libraries
 library(ggplot2)
