@@ -1,5 +1,4 @@
 # FIGURE 4
-## Figure 4A: 
 ```{r}
 # Import libraries
 library(ggplot2)
@@ -10,7 +9,9 @@ library(ape)
 library(phytools)
 library(phangorn)
 library(mclust)
-
+```
+## Figure 4A
+```{r}
 # Import table with basic example of LINcodes
 sub_lin2 <- read.csv("subset_lin.csv", header=TRUE, check.names = FALSE)
 
