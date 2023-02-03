@@ -8,7 +8,6 @@ library(scales)
 library(patchwork)
 library(dplyr)
 library(ggplot2)
-library(ggridges)
 ```
 ## FIGURE 3A
 ```{r}
