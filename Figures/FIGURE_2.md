@@ -32,7 +32,7 @@ borders <- ggplot() + theme_bw() +
          legend.title = element_blank(),legend.position="none",axis.text.x=element_text(color="black", size=6),axis.text.y=element_text(color="black", size=6),
          axis.title.y = element_text(face="bold", color="black", size=10),axis.title.x = element_text(face="bold", color="black", size=10)) 
 ```
-## FIGURE 2B:
+## FIGURE 2B
 ```{r}
 # Read MSTclust output
 mstclust_5000 <- read.csv("mstclust.5000.d", header=TRUE, check.names = FALSE)
@@ -97,31 +97,6 @@ densities <- ggplot(m5000_MERGED_test, aes(x = value*100, y = TAG, height = stat
          axis.title.x = element_text(face="bold", color="black", size=10)) 
 ```
 ## Figure 2C
-
-### Chaguza et al. (2020)
-```{r}
-# Import and merge metadata from multiple sources
-meta1 <- read.csv("chaguza_meta1.csv", header=TRUE)
-meta2 <- read.csv("chaguza_meta2.csv", header=TRUE)
-meta_merge <- merge(meta1,meta2, by.x=c("ENA_run_accession"), by.y=c("Lane.accession"), all=TRUE) %>% subset(!is.na(id)) %>% subset(!is.na(Sample.ID)) 
-
-# Read in table of pairwise allelic differences and convert to row format
-chaguza_difs <- read.csv("mst_cluster.chaguza.input.out.2.d", header=TRUE, check.names = FALSE)
-chaguza_difs_melted <- reshape2::melt(chaguza_difs, id.vars = c("ID")) %>% na.omit()
-
-# Merge allelic differences and metadata
-chaguza_difs_melted_a <- merge(chaguza_difs_melted, meta_merge, by.x=c("ID"), by.y=c("id"), all=TRUE)
-chaguza_difs_melted_b <- merge(chaguza_difs_melted_a, meta_merge, by.x=c("variable"), by.y=c("id"))
-
-# Label comparisons within and between subjects
-chaguza_difs_melted_b$out1 <- ifelse(chaguza_difs_melted_b$Subject.ID.x==chaguza_difs_melted_b$Subject.ID.y, "Same subject",
-                                     ifelse(chaguza_difs_melted_b$Subject.ID.x!=chaguza_difs_melted_b$Subject.ID.y,"Different subject","ERROR"))
-
-# Subset columns for merging
-chaguza_difs_melted_c <- chaguza_difs_melted_b %>% select(variable, ID, value, out1)
-```
-## Figure 2C
-
 ### Chaguza et al. (2020)
 ```{r}
 # Import and merge metadata from multiple sources
