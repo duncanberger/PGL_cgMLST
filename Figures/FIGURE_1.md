@@ -1,5 +1,3 @@
-
-
 # FIGURE 1
 ## FIGURE 1B: WORLD MAP
 ```{r}
