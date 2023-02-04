@@ -2,10 +2,9 @@
 
 This repository contains the data and the analysis workflow for the manuscript "Development of core genome multilocus sequence typing and taxonomic barcoding schemes to delineate global pneumococcal population structure."
 
-The repository is divided into 3 sections:  
-1). Production - containing all the commands used to produce data for analyses.  
-2). Analysis - containing all the commands used to analyse data.  
-3). Figures - containing scripts (1 script per figure) used to plot the results.  
+The repository is divided into 2 sections:  
+1). Analysis - containing all the commands used to analyse data.  
+2). Figures - containing scripts (1 script per figure) used to plot the results.  
 
 ## Abstract
 Background: Genomic epidemiology and surveillance are increasingly integral public health measures for understanding the distribution of pneumococcal genetic lineages associated with colonisation, disease, and antimicrobial resistance, and for assessing population-based changes due to pneumococcal vaccine implementation. The rapid accumulation of whole genome sequence data in recent years provides a strong incentive for the creation of accessible, high-quality genomic resources and genome-wide typing schemes for the scientific community.
