@@ -1,6 +1,6 @@
 # Notes
 
-## Assembly stats
+## BUSCO completeness
 ```
 # Calculate completeness stats for each assembly
 busco -f -m genome -o assembly.busco.out -i assembly.fa -c 1 -l busco_downloads/lineages/lactobacillales_odb10/
@@ -13,7 +13,7 @@ java -jar MSTclust.jar -i 1850.profiles.tsv -o mst_cluster.18k.input.out -l 1 -p
 # Convert output to a matrix with csv format
 cut -f1 -d ' ' mst_cluster.18k.input.out.d | datamash transpose | sed $'s/^/\t/g' | cat - mst_cluster.18k.input.out.d | tr -s ' ' | tr '\t' ',' | sed 's/ /,/g' | sed '1 s/^/ID/' > mstclust.5000.d
 ```
-## Phylogenetics
+## Maximum likelihood phylogenies
 ```
 # Using nucleotide sequences for each sample:allele combination downloaded from PubMLST, convert from unaligned XMFA to FASTA
 grep -v "+" export_PubMLST.fasta
