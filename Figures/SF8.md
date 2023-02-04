@@ -1,4 +1,4 @@
-Supplementary Figure 8
+# Supplementary Figure 8
 ```{r}
 # Load libraries
 library(ggplot2)
