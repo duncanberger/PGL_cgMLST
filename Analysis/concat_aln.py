@@ -33,9 +33,7 @@ def main(argv, out):
 				taxon_id = str(seqrec.id).split(args.delimiter)[0]
 			else:
 				taxon_id = str(seqrec.id)
-
 			seq = aln_out.get(taxon_id)
-
 			if seq:
 				existingkeys.remove(taxon_id)
 				aln_out[taxon_id] = seq + str(seqrec.seq)
@@ -43,11 +41,13 @@ def main(argv, out):
 				aln_out[taxon_id] = "-" * cumulativelength + str(seqrec.seq)
 			if args.gap:
 				aln_out[taxon_id] += str(int(args.gap) * "N")
+
 		for notfoundkey in existingkeys:
 			aln_out[notfoundkey] += "-" * alignmentlength
 			if args.gap:
 				aln_out[notfoundkey] += str(int(args.gap) * "N")
 		cumulativelength += alignmentlength
+		
 	print("Alignments: {}\nTotal taxa: {}\n\nFinished".format(aln_proc, len(aln_out)), file=sys.stderr)
 
 	with open(args.output,'w') as sm:
