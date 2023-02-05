@@ -30,7 +30,7 @@ ls | grep re | sort | sed 's/^/cat /g' | sed 's/$/ space.txt/g' | tr '\n' ' ' > 
 ./test.sh > out.reformatted.d.xmfa
 
 # Merge invidual FASTA files into supermatrix
-python join_alignments.py -a alignments/*.aln.out -u out.18k.concat -d ":"
+python concat_aln.py -a alignments/*.aln.out -u out.18k.concat -d ":"
 
 # Run FastTree
 FastTreeMP -gtr -nt -log logfile < out.18k.concat > out.18k.tree
