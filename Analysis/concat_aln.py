@@ -10,10 +10,10 @@ def main(argv, out):
 	if not len(argv):
 		argv.append('-h')
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=__doc__)
-	parser.add_argument('-a','--input', nargs="*", help="FASTA alignment files", required=True)
-	parser.add_argument('-g','--gap', help="Length of gaps between concatenated alignments [0]")
-	parser.add_argument('-d','--delimiter', help="Sequence name delimeter [None]")
-	parser.add_argument('-u','--output', help="Supermatrix output", required=True)
+	parser.add_argument('--input', nargs="*", help="FASTA alignment files", required=True)
+	parser.add_argument('--gap', help="Length of gaps between concatenated alignments [0]")
+	parser.add_argument('--delimiter', help="Sequence name delimeter [None]")
+	parser.add_argument('--output', help="Supermatrix output", required=True)
 	args = parser.parse_args(argv)
 
 	cumulativelength = 0
