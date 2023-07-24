@@ -40,6 +40,9 @@ ClonalFrameML out.18k.tree out.reformatted.d.xmfa cframe_18k_d -xmfa_file true -
 ```
 ## HierCC
 ```
+# Identify clusters
 pHierCC -p profiles.tsv -o output.all
+
+# Identify optimal thresholds for assigning genomes to clusters
 HCCeval -p profiles.tsv -c output.all.HierCC.gz -o output.all.eval
 ```
