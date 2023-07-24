@@ -38,3 +38,8 @@ FastTreeMP -gtr -nt -log logfile < out.18k.concat > out.18k.tree
 # Run ClonalFrameML
 ClonalFrameML out.18k.tree out.reformatted.d.xmfa cframe_18k_d -xmfa_file true -show_progress true -output_filtered true
 ```
+## HierCC
+```
+pHierCC -p profiles.tsv -o output.all
+HCCeval -p profiles.tsv -c output.all.HierCC.gz -o output.all.eval
+```
