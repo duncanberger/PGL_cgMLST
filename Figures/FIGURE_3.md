@@ -8,6 +8,7 @@ library(scales)
 library(patchwork)
 library(dplyr)
 library(ggplot2)
+library(mclust)
 ```
 ## FIGURE 3A
 ```{r}
