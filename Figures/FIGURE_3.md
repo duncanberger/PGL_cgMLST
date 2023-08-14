@@ -128,7 +128,7 @@ allset4 <- rbind(subset1, subset2)
 #mrg4 <- allset4  %>% sample_n(1000) 
 
 # Plot
-ggplot(data=subset(allset4), aes(y=mst3*100, x=log10(value.x))) + 
+ad_coph_plot <- ggplot(data=subset(allset4), aes(y=mst3*100, x=log10(value.x))) + 
   geom_point(aes(color=test), shape=16, alpha=0.5, stroke = 0, size=0.75) + 
   scale_x_continuous(expand=c(0,0), limits=c(-6,-1)) +
   scale_y_continuous(expand=c(0,0), limits=c(0,100)) + theme_bw() +
@@ -141,25 +141,6 @@ ggplot(data=subset(allset4), aes(y=mst3*100, x=log10(value.x))) +
          axis.text.x=element_text(color="black", size=6),axis.text.y=element_text(color="black", size=6),
          axis.title.y = element_text(face="bold", color="black", size=10),
          axis.title.x = element_text(face="bold", color="black", size=10)) + coord_flip()
-ad_coph_plot <- 
-
-ggplot(data=subset(mrg4)) + 
-  geom_density(aes(color=test, x=mst3*100, fill=test), shape=16, alpha=0.5, stroke = 0, size=0.75) + 
-  scale_x_continuous(expand=c(0,0), limits=c(0,100)) + theme_bw() +
-  geom_vline(xintercept = (1180/1222)*100, color="grey60", linetype="dashed") + 
-  geom_vline(xintercept = (750/1222)*100, color="grey60", linetype="dashed") +
-  geom_vline(xintercept = (540/1222)*100, color="grey60", linetype="dashed") +
-  geom_vline(xintercept = (160/1222)*100, color="grey60", linetype="dashed") +
-  geom_vline(xintercept = (25/1222)*100, color="grey60", linetype="dashed") +
-  scale_fill_manual(values=c("#44AA99","#CC6677","#AA4499","#332288","#bfaf41","#88CCEE","grey50")) +
-  scale_color_manual(values=c("#44AA99","#CC6677","#AA4499","#332288","#bfaf41","#88CCEE","grey50")) +
-  xlab("Nucleotide divergence (cophenetic distance)") + ylab("Allelic mismatches (% of loci)") +
-  theme( panel.grid = element_blank(), plot.title = element_text(face="bold", color="black"), 
-         axis.line = element_line(colour = "black"), panel.border = element_blank(),
-         legend.title = element_blank(), legend.position="none",
-         axis.text.x=element_text(color="black", size=6),axis.text.y=element_text(color="black", size=6),
-         axis.title.y = element_text(face="bold", color="black", size=10),
-         axis.title.x = element_text(face="bold", color="black", size=10)) 
 
 
 ```
