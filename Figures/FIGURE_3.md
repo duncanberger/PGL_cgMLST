@@ -174,7 +174,7 @@ linmeta$gy <- paste(linmeta$L1, linmeta$L2,linmeta$L3, sep="_")
 country_count <- linmeta %>% subset(!is.na(country)) %>% group_by(gy) %>% select(gy,country) %>% unique() %>% summarise(countries=n())
 
 # Get counts by serotype and LINcode
-sero_count <-linmeta %>% subset(!is.na(serotype)) %>% subset(serotype!="inconclusive" & serotype!="genetic variant" & serotype!="nontypable") %>% group_by(gy,serotype) %>% 
+sero_count <-linmeta %>% subset(!is.na(serotype)) %>% subset(serotype!="inconclusive" & serotype!="genetic variant") %>% group_by(gy,serotype) %>% 
   #filter(n() > 2) %>% 
   ungroup %>% group_by(gy) %>% select(gy,serotype) %>% unique() %>% summarise(serotype2=n())
 
