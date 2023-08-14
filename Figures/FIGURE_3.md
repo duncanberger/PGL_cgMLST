@@ -9,6 +9,7 @@ library(patchwork)
 library(dplyr)
 library(ggplot2)
 library(mclust)
+library(sjmisc)
 ```
 ## FIGURE 3A
 ```{r}
