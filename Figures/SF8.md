@@ -12,7 +12,7 @@ lincodes <- read.csv("FINAL_DATA/short_LINcodes_cgST.csv", header=TRUE) %>% na.o
 lincodes$gy <- paste(lincodes$L1,lincodes$L2,lincodes$L3, sep = "_")
 
 # Import phylogeny
-tree3 <- midpoint.root(read.newick("18k_tree.nwk"))
+tree3 <- midpoint.root(read.newick("19k_tree.nwk"))
 
 # Plot tree, coloring tippoints by the most prevalent lineages
 ggtree(tree3, layout="circular", size=0.1, color="grey30") %<+% 
