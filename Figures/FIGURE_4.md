@@ -10,7 +10,7 @@ library(phytools)
 library(phangorn)
 library(mclust)
 ```
-## Figure 4A
+## Figure 4a
 ```{r}
 # Import table with basic example of LINcodes
 sub_lin2 <- read.csv("subset_lin.csv", header=TRUE, check.names = FALSE)
@@ -38,7 +38,7 @@ ggplot(df2_q, aes(x = x,next_x = next_x, node = (node),next_node = next_node, la
   scale_fill_manual(values=c("#3288bd","#5e4fa2","#AA4499", "#d53e4f", "#d5a33e" ,"#117733" ,"#d53e4f", "#AA4499","lightblue","orange")) +
   theme_sankey() + theme(legend.position = "none")
 ```
-## Figure 4B
+## Figure 4b
 ```{r}
 # Import tree
 nk27 <- midpoint(read.newick("10e.nwk"))
