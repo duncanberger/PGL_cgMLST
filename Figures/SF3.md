@@ -1,4 +1,4 @@
-# Supplementary Figure 7
+# Supplementary Figure 3
 ```{r}
 Import libraries
 library(ggplot2)
