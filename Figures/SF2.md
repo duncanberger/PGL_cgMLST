@@ -1,4 +1,4 @@
-# Supplementary Figure 3
+# Supplementary Figure 2
 ```{r}
 # Load libraries
 library(circlize)
