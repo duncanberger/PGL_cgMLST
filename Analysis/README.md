@@ -46,3 +46,8 @@ pHierCC -p profiles.tsv -o output.all
 # Identify optimal thresholds for assigning genomes to clusters
 HCCeval -p profiles.tsv -c output.all.HierCC.gz -o output.all.eval
 ```
+## Mandrake
+```
+# Run Mandrake
+mandrake --alignment out.18k.concat --output def_knn5k
+```
