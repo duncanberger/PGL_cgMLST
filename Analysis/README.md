@@ -48,6 +48,11 @@ HCCeval -p profiles.tsv -c output.all.HierCC.gz -o output.all.eval
 ```
 ## Mandrake
 ```
+# Repeat allele concatenation and alignment as above on 5000 samples
+parallel -j8 "fastaqual_select.pl -f export_PubMLST.fasta -regexp {} > loci/{}.fasta" :::: spne.list
+parallel -j8 "cat loci/{}.fasta | fastaqual_select.pl -f - -i 5k_list.txt | mafft --thread 1 --auto - > alignments/{}.aln.out" :::: spne.list
+python concat_aln.py -a alignments/*.aln.out -u out.5k.concat -d ":"
+
 # Run Mandrake
-mandrake --alignment out.18k.concat --output def_knn5k
+mandrake --alignment out.5k.concat --output def_knn5k
 ```
