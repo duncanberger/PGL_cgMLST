@@ -12,8 +12,23 @@ library(dplyr)
 library(ggplot2)
 library(ggridges)
 ````
-## Figure 2A
+## Figure 2a
 ```{r}
+# Read MSTclust output
+mstclust_5000 <- read.csv("mstclust.5000.d", header=TRUE, check.names = FALSE)
+
+# Convert dataframe to columns of pairwise relationships
+mstclust_5000_melted <- reshape2::melt(mstclust_5000, id.vars = c("ID")) %>% na.omit()
+
+# Read in metadata (short version), merge tables
+metadata_short <- read.csv("short_metadata.csv", header=TRUE, check.names = FALSE)
+metadata_mandrake <- read.csv("def_knn_5k.embedding_hdbscan_clusters.csv", header=TRUE, check.names = FALSE)
+metadata_merged <- merge(metadata_short, metadata_mandrake, by.x=c("ID"), by.y=c("id"))
+
+# Add metadata from both isolates for each row
+mstclust_5000_melted_a <- merge(mstclust_5000_melted, metadata_merged, by.x=c("ID"), by.y=c("ID"), all=TRUE)
+mstclust_5000_melted_b <- merge(mstclust_5000_melted_a, metadata_merged, by.x=c("variable"), by.y=c("ID"), all=TRUE) %>% subset(!is.na(value))
+
 # Remove pairwise relationships between Streptococcus pseudopneumoniae
 m5000_ALL_sub <- mstclust_5000_melted_b  %>% subset(!is.na(species.x) && !is.na(species.y)) %>% select(variable, ID, value) %>% sample_n(200000) 
 
@@ -32,26 +47,8 @@ borders <- ggplot() + theme_bw() +
          legend.title = element_blank(),legend.position="none",axis.text.x=element_text(color="black", size=6),axis.text.y=element_text(color="black", size=6),
          axis.title.y = element_text(face="bold", color="black", size=10),axis.title.x = element_text(face="bold", color="black", size=10)) 
 ```
-## FIGURE 2B
+## FIGURE 2b
 ```{r}
-# Read MSTclust output
-mstclust_5000 <- read.csv("mstclust.5000.d", header=TRUE, check.names = FALSE)
-
-# Convert dataframe to columns of pairwise relationships
-mstclust_5000_melted <- reshape2::melt(mstclust_5000, id.vars = c("ID")) %>% na.omit()
-
-# Read in metadata (short version), merge tables
-metadata_short <- read.csv("short_metadata.csv", header=TRUE, check.names = FALSE)
-metadata_mandrake <- read.csv("def_knn_5k.embedding_hdbscan_clusters.csv", header=TRUE, check.names = FALSE)
-metadata_merged <- merge(metadata_short, metadata_mandrake, by.x=c("ID"), by.y=c("id"))
-
-# Add metadata from both isolates for each row
-mstclust_5000_melted_a <- merge(mstclust_5000_melted, metadata_merged, by.x=c("ID"), by.y=c("ID"), all=TRUE)
-mstclust_5000_melted_b <- merge(mstclust_5000_melted_a, metadata_merged, by.x=c("variable"), by.y=c("ID"), all=TRUE) %>% subset(!is.na(value))
-
-#write.table(mstclust_5000_melted_b,"mstclust_5000_melted_b.csv", sep=",", row.names=FALSE, quote=FALSE)
-#mstclust_5000_melted_b <- read.csv("mstclust_5000_melted_b.csv", header=TRUE)
-
 # Create a new dataframe for each subset of samples with matching clustering metric
 m5000_GPSC <- subset(mstclust_5000_melted_b, GPSC.x==GPSC.y & !is.na(GPSC.x)) %>% filter(!grepl(';', GPSC.x)) %>% select(variable, ID, value) 
 m5000_CC <- subset(mstclust_5000_melted_b, CC.x==CC.y & !is.na(CC.x)) %>% select(variable, ID, value) 
@@ -96,7 +93,7 @@ densities <- ggplot(m5000_MERGED_test, aes(x = value*100, y = TAG, height = stat
          axis.title.y = element_text(face="bold", color="black", size=10),
          axis.title.x = element_text(face="bold", color="black", size=10)) 
 ```
-## Figure 2C
+## Figure 2c
 ### Chaguza et al. (2020)
 ```{r}
 # Import and merge metadata from multiple sources
