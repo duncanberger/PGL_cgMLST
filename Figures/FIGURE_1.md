@@ -1,5 +1,4 @@
 # FIGURE 1
-## FIGURE 1B: WORLD MAP
 ```{r}
 # Import libraries
 library(tidyverse)
@@ -9,69 +8,8 @@ library(scales)
 library(patchwork)
 library(dplyr)
 library(ggplot2)
-
-## Import PubMLST data  
-metadata_PGL <- read.csv("BIGSdb_022144_3406796058_09951.csv" , na.strings=c(" ","NA",""), comment.char = "", header=TRUE)
-
-## Import list of vaccine/non-vaccine serotypes
-vac_sero <- read.table("vaccine_serotypes.csv", header=TRUE, sep=",")
-
-# Import table of sequencing statistics 
-seq_stats <- read.csv("sequence_bins_stats.csv", sep=",")
-busco <- read.table("../PGL/busco.sccores.out")
-
-# Import clonal complex/serotypes
-cc_st <- read.table("test/cc.st.list", header=TRUE)
-
-## Import world map data
-world <- map_data("world")
-
-## Change country name format to match map data, then summarize the results for plotting
-country_counts <- metadata_PGL %>%
-  mutate( across(.cols = everything(),~str_replace( ., 'UK \\[England\\]', "UK"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "UK \\[Scotland\\]", "UK"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "The Gambia", "Gambia"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "The Netherlands", "Netherlands"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "Trinidad and Tobago", "Trinidad"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "China \\[Hong Kong\\]", "China"))) %>%
-  mutate( across(.cols = everything(),~str_replace( ., "Congo \\[DRC\\]", "Democratic Republic of the Congo"))) %>% 
-  select(country) %>% dplyr::group_by(country) %>% dplyr::summarize(count = n())
-
-# Convert map data to sf format set reference system
-world.sf <- sf::st_as_sf(world, coords = c("long", "lat"), crs = 4326 ) %>% 
-  group_by(group) %>% 
-  summarize(do_union = FALSE) %>%
-  st_cast("POLYGON") %>% 
-  ungroup()
-
-# Get list of countries by rowid
-
-countries = map_data("world")  %>% distinct(region) %>% rowid_to_column()
-
-# Merge map data and metadata
-merge_country <- merge(countries, country_counts, by.x=("region"), by.y=("country"), all=TRUE) %>% subset(region!="Unknown")
-world_x1 <- world %>% select(group,region)
-world_x2 <- merge(world_x1, merge_country, by.x=("region"), by.y=("region"))
-world_x3 <- merge(world_x2, world.sf, by.x=("group"), by.y=("group"))
-
-# Group sample counts by country into categories
-world_x3$gcount <- ifelse(world_x3$count<1000,"A",
-                          ifelse(world_x3$count>=1000 & world_x3$count<2000,"B",
-                                 ifelse(world_x3$count>=2000 & world_x3$count<3000,"C",
-                                        ifelse(world_x3$count>=3000 & world_x3$count<4000,"D",
-                                               ifelse(world_x3$count>=4000 & world_x3$count<5000,"E",NA)))))
-
-# Plot
-world_plotb <- world_x3 %>% unique() %>% ggplot() +
-  geom_sf(colour = "black", aes(fill = gcount, geometry=geometry)) + 
-  coord_sf(ylim = c(-50, 90), datum = NA) +
-  theme(panel.background = element_rect(fill = 'white')) + theme_void() +
-  scale_fill_manual(values=c("#c7a2cd","#ad76b5","#8d5196","#64396a","#3a213e"), na.value="white") +
-  theme_void() +
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=0.3),
-        plot.margin=grid::unit(c(0,0,0,0), "mm"), legend.position = "none")
 ```
-## FIGURE 1C-F: Assembly statistics
+## FIGURE 1b-e: Assembly statistics
 ```{r}
 # Plot N50
 A1 <- ggplot(data=seq_stats) +
@@ -162,48 +100,71 @@ A4 <- ggplot(data=busco) +
 
 A1/A2/A3/A4
 ```
-
-## FIGURE 1G: Count by source/diagnosis and continent
+## FIGURE 1f: WORLD MAP
 ```{r}
-# Collapse clinical manifestations down to single category
-metadata_PGL$diagnosis2 <- ifelse(metadata_PGL$diagnosis=="carriage", "Carriage",
-                                         ifelse(metadata_PGL$diagnosis=="other","Other",
-                                                ifelse(is.na(metadata_PGL$diagnosis),NA,
-                                                       ifelse(metadata_PGL$diagnosis=="otitis media" |  
-                                                                metadata_PGL$diagnosis=="sinusitis" | 
-                                                                metadata_PGL$diagnosis=="conjunctivitis" |  
-                                                                metadata_PGL$diagnosis=="pharyngitis" |
-                                                                metadata_PGL$diagnosis=="peritonitis" |
-                                                                metadata_PGL$diagnosis=="otitis media; other","Disease",
-                                                              ifelse(!is.na(metadata_PGL$diagnosis),"Disease",no = "ELSE")))))
+## Import PubMLST data  
+metadata_PGL <- read.csv("PGL_FREEZE_21072023 (1).csv" , na.strings=c(" ","NA",""), comment.char = "", header=TRUE)
 
-# Counts by source/diagnosis and continent
-metadata_PGL_source <- metadata_PGL %>% subset(diagnosis2!="other") %>%
-  select(diagnosis2, continent) %>% 
-  dplyr::group_by(diagnosis2, continent) %>% 
-  dplyr::summarize(count = n())
+## Import list of vaccine/non-vaccine serotypes
+vac_sero <- read.table("vaccine_serotypes.csv", header=TRUE, sep=",")
+
+# Import table of sequencing statistics 
+seq_stats <- read.csv("sequence_bins_stats.csv", sep=",")
+busco <- read.table("csc.busco.txt")
+
+# Import clonal complex/serotypes
+cc_st <- read.table("cc.st.list", header=TRUE)
+
+## Import world map data
+world <- map_data("world")
+
+## Change country name format to match map data, then summarize the results for plotting
+country_counts <- metadata_PGL %>%
+  mutate( across(.cols = everything(),~str_replace( ., 'UK \\[England\\]', "UK"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "UK \\[Scotland\\]", "UK"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "The Gambia", "Gambia"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "The Netherlands", "Netherlands"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "Trinidad and Tobago", "Trinidad"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "China \\[Hong Kong\\]", "China"))) %>%
+  mutate( across(.cols = everything(),~str_replace( ., "Congo \\[DRC\\]", "Democratic Republic of the Congo"))) %>% 
+  select(country) %>% dplyr::group_by(country) %>% dplyr::summarize(count = n())
+
+# Convert map data to sf format set reference system
+world.sf <- sf::st_as_sf(world, coords = c("long", "lat"), crs = 4326 ) %>% 
+  group_by(group) %>% 
+  summarize(do_union = FALSE) %>%
+  st_cast("POLYGON") %>% 
+  ungroup()
+
+# Get list of countries by rowid
+
+countries = map_data("world")  %>% distinct(region) %>% rowid_to_column()
+
+# Merge map data and metadata
+merge_country <- merge(countries, country_counts, by.x=("region"), by.y=("country"), all=TRUE) %>% subset(region!="Unknown")
+world_x1 <- world %>% select(group,region)
+world_x2 <- merge(world_x1, merge_country, by.x=("region"), by.y=("region"))
+world_x3 <- merge(world_x2, world.sf, by.x=("group"), by.y=("group"))
+
+# Group sample counts by country into categories
+world_x3$gcount <- ifelse(world_x3$count<1000,"A",
+                          ifelse(world_x3$count>=1000 & world_x3$count<2000,"B",
+                                 ifelse(world_x3$count>=2000 & world_x3$count<3000,"C",
+                                        ifelse(world_x3$count>=3000 & world_x3$count<4000,"D",
+                                               ifelse(world_x3$count>=4000 & world_x3$count<5000,"E",NA)))))
 
 # Plot
-diag <- ggplot(data=metadata_PGL_source %>% na.omit() %>% subset(diagnosis2!="Other")) +
-  geom_col(aes(x=(reorder(continent,count)),y=(count/27698)*100, fill=diagnosis2), color="black", 
-           position = position_dodge(preserve = 'single')) + theme_bw()  +
-  scale_y_continuous(expand=c(0,0), limits=c(0,20)) +
-  xlab("") + ylab("Genomes (%)") +
-  scale_fill_manual(na.value="white", values=c("grey35","grey85")) +
-  theme(
-    panel.grid = element_blank(),
-    plot.title = element_text(face="bold", color="black"),
-    legend.title = element_blank(),
-    legend.position = c(0.75, 0.25),
-    axis.text.y=element_text(color="black", size=8, face="bold"),
-    axis.text.x=element_text(color="black", size=6),
-    axis.line = element_line(colour = "black"),
-    panel.border = element_blank(),
-    axis.title.y = element_text(face="bold", color="black", size=8),
-    axis.title.x = element_text(face="bold", color="black", size=8)) + coord_flip()
+world_plotb <- world_x3 %>% unique() %>% ggplot() +
+  geom_sf(colour = "black", aes(fill = gcount, geometry=geometry)) + 
+  coord_sf(ylim = c(-50, 90), datum = NA) +
+  theme(panel.background = element_rect(fill = 'white')) + theme_void() +
+  scale_fill_manual(values=c("#c7a2cd","#ad76b5","#8d5196","#64396a","#3a213e"), na.value="white") +
+  theme_void() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=0.3),
+        plot.margin=grid::unit(c(0,0,0,0), "mm"), legend.position = "none")
 ```
 
-## FIGURE 1H: Counts by year
+## FIGURE 1g: Counts by year
 ```{r}
 # Summarize counts by year
 metadata_PGL_year <- metadata_PGL %>% 
@@ -227,7 +188,7 @@ PGL_year <- ggplot(data=metadata_PGL_year) +
     axis.title.x = element_text(face="bold", color="black", size=8))
 ```
 
-## FIGURE 1I: 
+## FIGURE 1h: 
 ```{r}
 # Get counts by serotype
 metadata_PGL_serotype <- metadata_PGL %>% dplyr::mutate(across('serotype', str_replace, "6E\\(6Bii\\)", 'genetic variant'))  %>%
@@ -264,7 +225,7 @@ PGL_sero <- ggplot(data=metadata_PGL_serotype_vs %>% arrange(-count) %>% subset(
   guides(shape = guide_legend(override.aes = list(size = 0.3))) 
 ```
 
-## FIGURE 1J: 
+## FIGURE 1i: 
 ```{r}
 # Select sequence types
 tf <- metadata_PGL %>% select(ST..MLST.) %>% na.omit() 
@@ -354,7 +315,7 @@ rarefaction <- ggplot() +
     axis.title.x = element_text(face="bold", color="black", size=8))
 ```
 
-## FIGURE 1K: 
+## FIGURE 1j: 
 ```{r}
 # Count number of samples per clonal complex
 tf4x <- cc_st %>% select(CC,ST) %>% na.omit() %>% group_by(CC) %>% summarise(count_CC = n())
