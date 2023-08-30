@@ -9,7 +9,7 @@ library(ape)
 missing_list <- read.csv("missingness.csv", header=TRUE)
 
 # Import phylogeny (from Figure 2a)
-tree3 <- midpoint.root(read.newick("18k_tree.nwk"))
+tree3 <- midpoint.root(read.newick("19k_tree.nwk"))
 
 # Plot simple phylogeny
 treezz <- ggtree(tree3, layout="rectangular", size=0.1, color="grey30")
