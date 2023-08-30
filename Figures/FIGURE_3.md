@@ -11,7 +11,7 @@ library(ggplot2)
 library(mclust)
 library(sjmisc)
 ```
-## FIGURE 3A
+## FIGURE 3a
 ```{r}
 # Import LINCodes and create strings of relevant groupings
 lincodes <- read.csv("FINAL_DATA/short_LINcodes_cgST.csv", header=TRUE) %>% na.omit()
@@ -20,10 +20,10 @@ lincodes$gy <- paste(lincodes$L1, lincodes$L2,lincodes$L3, sep = "_")
 lincodes$gz <- paste(lincodes$L1, lincodes$L2,lincodes$L3,lincodes$L4, sep = "_")
 
 # Import phylogeny
-tree3 <- midpoint.root(read.newick("18k_tree.nwk"))
+tree3 <- midpoint.root(read.newick("19k_tree.nwk"))
 
 # Import list of samples
-sample_list <- read.table("shortlist.txt")
+sample_list <- read.table("shortlist2.txt")
 
 # Subset LINcode list to relevant ids
 tx22 <- lincodes[lincodes$id %in% sample_list$V1, ]
@@ -61,23 +61,23 @@ ggtree(tree3, layout="circular", size=0.1, color="grey30")  %<+% subset(lincodes
   geom_cladelabel(node=3201, color='black', label = "0_265_0", offset = 0.00015, barsize = 0.45) + geom_hilight(node = 3201,alpha = .5, fill="#E76BF3") +
   geom_cladelabel(node=3259, color='black', label = "0_310_0", offset = 0.00015, barsize = 0.45) + geom_hilight(node = 3259,alpha = .5, fill="#607d8b") 
 ````
-## Figure 3B
+## Figure 3b
 ```{r}
 # Import tree (from Figure 2A)
-tree3 <- midpoint.root(read.newick("18k_tree.nwk"))
+tree3 <- midpoint.root(read.newick("19k_tree.nwk"))
 
 # Calculate pairwise cophentic distance 
 coph1 <- (cophenetic(tree3) %>% reshape2::melt())
 
 # Get allelic mismatch stats from MSTclust
-mst_1850 <- read.csv("mst_cluster.19k.input.out.2.d.csv", header=TRUE, check.names = FALSE) %>% reshape2::melt(id.vars = c("ID")) %>% na.omit()
+mst_1950 <- read.csv("mst_cluster.19k.input.out.2.d.csv", header=TRUE, check.names = FALSE) %>% reshape2::melt(id.vars = c("ID")) %>% na.omit()
 
 # Get LINcodes 
 lincodes <- read.csv("FINAL_DATA/short_LINcodes_cgST.csv", header=TRUE) %>% na.omit()
 
 # Merge dataframes
-mrg1 <- merge(coph1, mst_1850, by.y=c("ID","variable"), by.x=c("Var1","Var2"), all.x=TRUE)
-mrg2 <- merge(mrg1, mst_1850, by.y=c("variable","ID"), by.x=c("Var1","Var2"), all.x=TRUE) %>% subset(!is.na(value) | !is.na(value.y))
+mrg1 <- merge(coph1, mst_1950, by.y=c("ID","variable"), by.x=c("Var1","Var2"), all.x=TRUE)
+mrg2 <- merge(mrg1, mst_1950, by.y=c("variable","ID"), by.x=c("Var1","Var2"), all.x=TRUE) %>% subset(!is.na(value) | !is.na(value.y))
 
 # Copy across columns to get consistency for pairwise comparisons
 mrg2$mst3 <- rowSums(mrg2[,c("value", "value.y")], na.rm=TRUE)
